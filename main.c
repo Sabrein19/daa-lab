@@ -1,45 +1,37 @@
 #include <stdio.h>
 #include <stdlib.h>
-void bfs(int a[10][10],int n,int visited[10],int source)
+int topo[10],k;
+void dfs(int a[10][10],int n,int visited[10],int source)
 {
-    int queue[10],front=0,rear=-1,i,delnode;
-    visited[source]=1;
-    queue[++rear]=source;
-    while(front<=rear)
-    {
-        delnode=queue[front++];
-        for(i=0;i<n;i++)
-        {
-            if(a[delnode][i]==1&&visited[i]==0)
-            {
-                visited[i]=1;
-                queue[++rear]=i;
-            }
-        }
-    }
+  int i;
+  visited[source]=1;
+  for(i=1;i<=n;i++)
+  {
+      if(visited[i]==0&&a[source][i]==1)
+        dfs(a,n,visited,i);
+  }
+  topo[++k]=source;
 }
 int main()
 {
- int n,a[10][10],i,j,visited[10],count=0;
+ int n,a[10][10],i,j,visited[10];
  printf("\n read number of nodes:");
  scanf("%d",&n);
  printf("\n read adjacency matrix:\n");
- for(i=0;i<n;i++)
-    for(j=0;j<n;j++)
+ for(i=1;i<=n;i++)
+    for(j=1;j<=n;j++)
       scanf("%d",&a[i][j]);
- for(i=0;i<n;i++)
+ for(i=1;i<=n;i++)
     visited[i]=0;
- for(i=0;i<n;i++)
+ for(i=1;i<=n;i++)
  {
      if(visited[i]==0)
      {
-         bfs(a,n,visited,i);
-         count++;
+         dfs(a,n,visited,i);
      }
  }
- if(count==1)
-    printf("\n graph is connected");
-else
-    printf("\n graph not connected & has %d components",count);
-return 0;
+ printf("\n topological sort is:\n");
+ for(i=k;i>=1;i--)
+    printf("%d\t",topo[i]);
+ return 0;
 }
