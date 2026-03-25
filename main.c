@@ -1,48 +1,62 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include<stdio.h>
+#include<stdlib.h>
 int count;
-void merge(int A[10],int l,int m,int r)
+int partition(int A[10], int l, int r)
 {
-    int i,j,k,B[10];
-    i=l;
-    j=m+1;
-    k=l;
-    while(i<=m && j<=r)
+    int pivot,i,j,temp;
+    pivot=A[l];
+    i=l+1;
+    j=r;
+    while(1)
     {
-        count++;
-        i++;
+        while(pivot>=A[i] && i<=r)
+        {
+            count++;
+            i++;
+        }
+        while(pivot<A[j])
+        {
+            count++;
+            j--;
+        }
+        if(i<j)
+        {
+            temp=A[i];
+            A[i]=A[j];
+            A[j]=temp;
+        }
+        else
+        {
+            temp=A[l];
+            A[l]=A[j];
+            A[j]=temp;
+            return j;
+        }
     }
-    while(i<=m)
-        B[k++]=A[i++];
-    while(j<=r)
-        B[k++]=A[j++];
-    for(i=l;i<=r;i++)
-        A[i]=B[i];
 }
-void merge_Sort(int A[10],int l,int r)
+
+void quicksort(int A[10],int l,int r)
 {
-    int m;
+    int s;
     if(l<r)
     {
-        m=(l+r)/2;
-        merge_sort(A,l,m);
-        merge_sort(A,m+1,r);
-        merge(A,l,m,r);
+        s=partition(A,l,r);
+        quicksort(A,l,s-1);
+        quicksort(A,s+l,r);
     }
 }
 int main()
 {
     int i,n,A[10];
-    printf("\nRead Array size: ");
+    printf("\nRead array size:");
     scanf("%d",&n);
-    printf("\nRead array elements:\n");
+    printf("\nRead array elements\n");
     for(i=0;i<n;i++)
         scanf("%d",&A[i]);
-    merge_sort(A,0,n-1);
+    quicksort(A,0,n-1);
     printf("\nSorted elements are:\n");
     for(i=0;i<n;i++)
         printf("%d\t",A[i]);
-    printf("\nTotal number of comparisons= %d",count);
+    printf("\nTotal no. of comparison=%d\n",count);
     return 0;
 }
-
